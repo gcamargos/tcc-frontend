@@ -3,18 +3,27 @@
     <div class="modal-overlay" @click="$emit('close-modal')">
       <div class="modal" @click.stop>
         <label
-          >Nome do remédio:
-          <input
-            type="text"
-            name="nomeRemedio"
-            placeholder="Digite o nome do remédio"
-            v-model="nomeRemedio"
-          />
+          ><span>Nome do medicamento:</span>
+          <select name="medicamentos" class="medicamentos" v-model="escolhaMedicamento">
+            <option value="selecionar" selected disabled hidden>Selecionar</option>
+            <option :name="medicamentos" v-for="medicamentos in opcoesMedicamento" :key="medicamentos + '-medicamento'" >
+              {{medicamentos}}
+            </option>
+          </select>
         </label>
         <br />
+        <label v-show="escolhaMedicamento !== 'selecionar'">
+          <span>Dispositivo: </span>
+          <select name="dispositivos" class="dispositivos" v-model="escolhaDispositivo">
+            <option value="selecionar" selected disabled hidden>Selecionar</option>
+            <option :name="dispositivo.dispositivo" v-for="dispositivo in opcoesDispositivo" :key="dispositivo.id + '-dispositivo'" >
+              {{dispositivo.dispositivo.descricao}}
+            </option>
+          </select>
+        </label>
         <br />
         <label
-          >Marca hora do remédio
+          ><span>Hora do remédio:</span>
           <input
             type="datetime-local"
             name="dataRemedio"
@@ -45,20 +54,66 @@ export default {
     return {
       nomeRemedio: "",
       dataRemedio: "",
+      opcoesMedicamento: [],
+      escolhaMedicamento: "selecionar",
+      opcoesDispositivo: [],
+      escolhaDispositivo: "selecionar",
     };
+  },
+  watch: {
+    escolhaMedicamento(newValue, oldValue) {
+      if (newValue !== oldValue){
+        this.getOpcoesDispositivo();
+      }
+    }
   },
   methods: {
     async submitForm(e) {
       e.preventDefault();
+      let dispositivoId;
+      this.opcoesDispositivo.map(item => { 
+       if (item.dispositivo.descricao === this.escolhaDispositivo) {
+        dispositivoId = item.dispositivo.dispositivo;
+       }
+    })
       const jsonBody = {
-        nomeRemedio: this.nomeRemedio,
+        nomeRemedio: this.escolhaMedicamento,
         dataRemedio: this.dataRemedio,
+        dispositivoId: dispositivoId
       };
+      console.log(jsonBody);
       axios.post("https://tcc-backend-chi.vercel.app/agendar", jsonBody)
       .then((response) => {console.log(response)})
       .catch((error) => {console.log(error)});
     },
+    async getOpcoesMedicamento() {
+      const response = await axios.get(
+        "https://tcc-backend-chi.vercel.app/medicamentos"
+      );
+      console.log(response);
+      const medicamentos = await response.data;
+      if (!medicamentos?.length) return;
+      await medicamentos.forEach((item) => {
+        if (!(this.opcoesMedicamento.includes(item.medicamento))){
+          this.opcoesMedicamento.push(item.medicamento);
+        }
+      })
+    },
+    async getOpcoesDispositivo() {
+      const jsonBody = {
+        medicamento: this.escolhaMedicamento
+      }
+      console.log(jsonBody);
+      axios.post(
+        "https://tcc-backend-chi.vercel.app/dispositivos", jsonBody
+      ).then((response) => {
+        this.opcoesDispositivo = response.data
+        }).catch((error) => console.log(error));
+    }
   },
+  mounted() {
+    this.getOpcoesMedicamento();
+  }
 };
 </script>
 
@@ -78,6 +133,7 @@ export default {
 .modal {
   text-align: center;
   background-color: white;
+  color: black;
   height: 500px;
   width: 500px;
   margin-top: 10%;
@@ -119,5 +175,13 @@ button {
   font-size: 14px;
   border-radius: 16px;
   margin-top: 50px;
+}
+
+label span{
+  padding-right: 12px;
+}
+
+.medicamentos {
+  width: 90px;
 }
 </style>

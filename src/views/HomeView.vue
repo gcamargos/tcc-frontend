@@ -93,14 +93,14 @@ export default {
     async showListHome() {
       this.optionMenu = 1;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/consultar"
+        "https://tcc-backend-chi.vercel.app/remedios"
       );
       this.renderList = await response.json();
     },
     async showListAtrasados() {
       this.optionMenu = 2;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/consultar"
+        "https://tcc-backend-chi.vercel.app/remedios"
       );
       const atrasados = await response.json();
       if (!atrasados?.length) return;
@@ -113,7 +113,7 @@ export default {
     async toSchedule() {
       this.optionMenu = 3;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/consultar"
+        "https://tcc-backend-chi.vercel.app/remedios"
       );
       this.renderList = await response.json();
     },
@@ -128,8 +128,9 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 body {
-  background-color: #e3e3e3;
+  background-color: #202324;
   font-family: "Poppins", "Raleway", sans-serif;
+  color: white;
 }
 
 .navBarContainer {
@@ -145,7 +146,7 @@ body {
 }
 
 table {
-  border: 1px solid black;
+  border: 1px solid rgba(152, 82, 7, 0.953);
   border-radius: 30px 30px 0px 0px;
   margin: auto;
   margin-top: 40px;
@@ -165,12 +166,12 @@ tr {
 }
 
 tr:nth-child(even) {
-  background: #e5e9eb;
+  background: #22292C;
 }
 
 .headerMedicineContainer {
   border-radius: 30px 30px 0px 0px;
-  background: #e5e9eb;
+  background: #282B2D;
 }
 
 .bodyMedicineContainer {
@@ -194,18 +195,18 @@ th {
   box-sizing: border-box;
   padding: 16px 42px;
   font-family: "Poppins", "Raleway", sans-serif;
-  background: #e5e9eb;
+  background: #22292C;
   text-decoration: none;
-  color: rgb(0, 0, 0);
+  color: white;
   font-size: 16px;
   font-weight: 400;
-  border: 1px solid black;
+  border: 1px solid rgba(152, 82, 7, 0.953);
   border-radius: 10px;
   cursor: pointer;
 }
 
 .button:hover {
-  color: rgb(0, 0, 0);
+  color: white;
   font-weight: 700;
   border: 1px solid black;
 }
@@ -214,12 +215,12 @@ th {
   box-sizing: border-box;
   padding: 16px 42px;
   font-family: "Poppins", "Raleway", sans-serif;
-  background: #e5e9eb;
+  background: #1c1d20;
   text-decoration: none;
-  color: rgb(0, 0, 0);
+  color: white;
   font-size: 16px;
   font-weight: 700;
-  border: 1px solid black;
+  border: 1px solid rgba(152, 82, 7, 0.953);
   border-radius: 10px;
   cursor: pointer;
 }

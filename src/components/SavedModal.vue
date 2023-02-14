@@ -17,7 +17,7 @@
           <select name="dispositivos" class="dispositivos" v-model="escolhaDispositivo">
             <option value="selecionar" selected disabled hidden>Selecionar</option>
             <option :name="dispositivo.dispositivo" v-for="dispositivo in opcoesDispositivo" :key="dispositivo.id + '-dispositivo'" >
-              {{dispositivo.dispositivo.descricao}}
+              {{dispositivo.descricao}}
             </option>
           </select>
         </label>
@@ -72,25 +72,24 @@ export default {
       e.preventDefault();
       let dispositivoId;
       this.opcoesDispositivo.map(item => { 
-       if (item.dispositivo.descricao === this.escolhaDispositivo) {
-        dispositivoId = item.dispositivo.dispositivo;
+       if (item.descricao === this.escolhaDispositivo) {
+        dispositivoId = item.dispositivo;
        }
     })
       const jsonBody = {
         nomeRemedio: this.escolhaMedicamento,
         dataRemedio: this.dataRemedio,
-        dispositivoId: dispositivoId
+        dispositivoId
       };
-      console.log(jsonBody);
       axios.post("https://tcc-backend-chi.vercel.app/agendar", jsonBody)
       .then((response) => {console.log(response)})
       .catch((error) => {console.log(error)});
     },
     async getOpcoesMedicamento() {
       const response = await axios.get(
-        "https://tcc-backend-chi.vercel.app/medicamentos"
+        "https://tcc-backend-chi.vercel.app/consultar/medicamentos"
       );
-      console.log(response);
+
       const medicamentos = await response.data;
       if (!medicamentos?.length) return;
       await medicamentos.forEach((item) => {
@@ -100,12 +99,8 @@ export default {
       })
     },
     async getOpcoesDispositivo() {
-      const jsonBody = {
-        medicamento: this.escolhaMedicamento
-      }
-      console.log(jsonBody);
-      axios.post(
-        "https://tcc-backend-chi.vercel.app/dispositivos", jsonBody
+      axios.get(
+        "https://tcc-backend-chi.vercel.app/consultar/dispositivos"
       ).then((response) => {
         this.opcoesDispositivo = response.data
         }).catch((error) => console.log(error));
@@ -134,7 +129,7 @@ export default {
   text-align: center;
   background-color: white;
   color: black;
-  height: 500px;
+  height: 40%;
   width: 500px;
   margin-top: 10%;
   padding: 60px 0;
@@ -180,7 +175,9 @@ button {
 label span{
   padding-right: 12px;
 }
-
+label{
+  margin-top: 200px;
+}
 .medicamentos {
   width: 90px;
 }

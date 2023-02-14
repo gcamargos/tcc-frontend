@@ -93,14 +93,14 @@ export default {
     async showListHome() {
       this.optionMenu = 1;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/remedios"
+        "https://tcc-backend-chi.vercel.app/consultar/remedios"
       );
       this.renderList = await response.json();
     },
     async showListAtrasados() {
       this.optionMenu = 2;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/remedios"
+        "https://tcc-backend-chi.vercel.app/consultar/remedios"
       );
       const atrasados = await response.json();
       if (!atrasados?.length) return;
@@ -113,7 +113,7 @@ export default {
     async toSchedule() {
       this.optionMenu = 3;
       const response = await fetch(
-        "https://tcc-backend-chi.vercel.app/remedios"
+        "https://tcc-backend-chi.vercel.app/consultar/remedios"
       );
       this.renderList = await response.json();
     },
